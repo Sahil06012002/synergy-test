@@ -1,47 +1,13 @@
 import axios from "axios";
+import { DisplayUser, User } from "../types";
 const BASE_URL = 'https://jsonplaceholder.typicode.com/'
 
-interface Geo {
-    lat: string;
-    lng: string;
-  }
-  
-  interface Address {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: Geo;
-  }
-  
-  interface Company {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  }
-  
-  interface User1 {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    address: Address;
-    phone: string;
-    website: string;
-    company: Company;
-  }
 
-  interface User {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-  }
 export async function getUsers()
 {
   try {
-      const incomingUsers = await axios.get(`https://jsonplaceholder.typicode.com/users`);
-      const mappedUsers: User[] = incomingUsers.data.map((incomingUser: any) => {
+      const incomingUsers = await axios.get(`${BASE_URL}/users`);
+      const mappedUsers: DisplayUser[] = incomingUsers.data.map((incomingUser: User) => {
         return {
           id: incomingUser.id,
           name: incomingUser.name,
@@ -49,12 +15,35 @@ export async function getUsers()
           email: incomingUser.email
         };
       });
+      console.log(incomingUsers)
       return mappedUsers;
       
   }
   catch(error)
   {
       return [];
+  }
+    
+}
+
+export async function postUsers(incomingUser : User) : Promise<DisplayUser | null>
+{
+  try {
+    const user = incomingUser;
+      const state = await axios.post(`${BASE_URL}/users`,user);
+      const data = state.data;
+      let addedUser : DisplayUser = {
+          id: data.id,
+          name: data.name,
+          username: data.username,
+          email: data.email
+        };
+        return addedUser;
+      
+  }
+  catch(error)
+  {
+      return null;
   }
     
 }

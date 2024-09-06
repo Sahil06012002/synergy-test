@@ -1,29 +1,33 @@
 import { useState } from "react";
 import Button from "../components/button";
-import axios from "axios";
-import { getUsers } from "../api/users";
+import { getUsers, postUsers } from "../api/users";
+import { Modal } from "../components/modal";
+import {DisplayUser} from "../types"
 
-interface User {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-  }
+
 export default function User()
 {
     async function handleGetUsers()
     {
         try {
-            const incomingUsersMappedUsers = await getUsers();      
-            setUsers(incomingUsersMappedUsers);
+            const incomingMappedUsers = await getUsers();      
+            setUsers(incomingMappedUsers);
         }
         catch(error)
         {
             return ;
         }
   }
-  const [users,setUsers] = useState<User[]>([]);
+
+  const openModal = async () => {
+    setIsModalVisible(true);
+  };
+  const closeModal = () => setIsModalVisible(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [users,setUsers] = useState<DisplayUser[]>([]);
     return <div>
+        <Button onClickHandler={openModal}>Add Users</Button>
+        {isModalVisible &&  <Modal users={users} setUsers={setUsers} onClose={closeModal}></Modal>}
         {users.length === 0 && <Button onClickHandler={handleGetUsers}>Get Users</Button>}
       {
         users.map((user) => {
