@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../components/button";
-import { getUsers, postUsers } from "../api/users";
+import { getUsers} from "../api/users";
 import { Modal } from "../components/modal";
 import {DisplayUser} from "../types"
 
