@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { postUsers } from "../api/users";
+import { getUsers, postUsers } from "../api/users";
 import { User, Address, Company, DisplayUser} from "../types";
 interface prop {
     users: DisplayUser[],
@@ -61,9 +61,12 @@ export const Modal = (prop: prop) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //get the latest id of the user
+
+    const latestId = prop.users.reduce((max, obj) => (obj.id > max ? obj.id : max), prop.users[0].id);
 
     const user = await postUsers({
-      id: formData.id,
+      id: latestId+1,
       name: formData.name,
       username: formData.username,
       email: formData.email,

@@ -15,7 +15,6 @@ export async function getUsers()
           email: incomingUser.email
         };
       });
-      console.log(incomingUsers)
       return mappedUsers;
       
   }
